@@ -36,4 +36,8 @@ public class CardPattern {
     public static final String DINERS_CLUB_SHORT = "^30[0-5]";
     public static final String DINERS_CLUB_VALID = "^3(?:0[0-5]|[68][0-9])[0-9]{11}$";
 
+    // Interswitch Verve [Nigeria]
+    public static final String REGX_VERVE_TYPE = "^506[0,1]$";
+    public static final String REGX_VERVE = "^(506099|5061[0-8][0-9]|50619[0-8])[0-9]{13}$";
+
 }

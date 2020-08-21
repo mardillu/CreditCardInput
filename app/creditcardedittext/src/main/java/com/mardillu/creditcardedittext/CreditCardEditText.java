@@ -75,6 +75,10 @@ public class CreditCardEditText extends AppCompatAutoCompleteTextView {
             }
         });
         // The input filters
+        updateInputFilters(19);
+    }
+
+    void updateInputFilters(int maxLength){
         InputFilter filter = new InputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
@@ -87,7 +91,7 @@ public class CreditCardEditText extends AppCompatAutoCompleteTextView {
             }
         };
         // Setting the filters
-        setFilters(new InputFilter[]{filter, new InputFilter.LengthFilter(19)});
+        setFilters(new InputFilter[]{filter, new InputFilter.LengthFilter(maxLength)});
     }
 
     private void changeIcon() {
@@ -110,9 +114,18 @@ public class CreditCardEditText extends AppCompatAutoCompleteTextView {
         } else if (s.matches(CardPattern.DINERS_CLUB_SHORT) || s.matches(CardPattern.DINERS_CLUB)) {
             setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.dc, 0);
             type = "Diners_Club";
+        }else if (s.length() >= 4 && s.substring(0, 4).matches(CardPattern.REGX_VERVE_TYPE)) {
+            setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vv, 0);
+            type = "Verve";
         } else {
             setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.card, 0);
             type = "UNKNOWN";
+        }
+
+        if (type.equals("Verve")){
+            updateInputFilters(23);
+        }else {
+            updateInputFilters(19);
         }
 
         if (creditCardInputListener != null){
@@ -131,6 +144,7 @@ public class CreditCardEditText extends AppCompatAutoCompleteTextView {
         if (getCardNumber().matches(CardPattern.DISCOVER_VALID)) return true;
         if (getCardNumber().matches(CardPattern.DINERS_CLUB_VALID)) return true;
         if (getCardNumber().matches(CardPattern.JCB_VALID)) return true;
+        if (getCardNumber().matches(CardPattern.REGX_VERVE)) return true;
         return false;
     }
 
@@ -158,7 +172,7 @@ public class CreditCardEditText extends AppCompatAutoCompleteTextView {
         }
         int charCount = s.length();
         StringBuilder builder = new StringBuilder("");
-        if (type.equals("UNKNOWN") || type.equals("Visa") || type.equals("Discover") || type.equals("JCB")) {
+        if (type.equals("UNKNOWN") || type.equals("Visa") || type.equals("Discover") || type.equals("JCB") || type.equals("Verve")) {
 //            if (charCount == 4 || charCount == 8 || charCount == 12) {
 //                if (!s.toString().endsWith("-")) {
 //                    append("-");
@@ -166,7 +180,7 @@ public class CreditCardEditText extends AppCompatAutoCompleteTextView {
 //            }
 
             for (int i = 0; i < charCount; i++) {
-                if (i == 4 || i == 8 || i == 12){ //4th, 8th and 12th chars
+                if (i == 4 || i == 8 || i == 12 || i == 16){ //4th, 8th and 12th chars
                     builder.append("-");
                 }
                 builder.append(s.charAt(i));
