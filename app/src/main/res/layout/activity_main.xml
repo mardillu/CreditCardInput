@@ -14,4 +14,28 @@
         android:hint="XXXX XXXX XXXX XXXX"
         android:layout_margin="20dp" />
 
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/lyo"
+        android:layout_below="@+id/input_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        android:hint="Hello Africa"
+        app:hintAnimationEnabled="true"
+        android:layout_margin="20dp"
+        app:helperTextEnabled="true"
+        app:boxStrokeColor="@color/colorPrimary"
+        app:boxBackgroundColor="@color/colorAccent"
+        app:boxCornerRadiusTopEnd="10dp"
+        app:helperText="XXXX XXXX XXXX XXXX">
+
+        <com.mardillu.creditcardedittext.CreditCardEditText
+            android:id="@+id/credit_card_number"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="phone"
+            android:paddingBottom="15dp"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 </RelativeLayout>

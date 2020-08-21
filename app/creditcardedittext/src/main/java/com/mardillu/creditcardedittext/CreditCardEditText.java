@@ -20,6 +20,8 @@ public class CreditCardEditText extends AppCompatAutoCompleteTextView {
 
     String type = "UNKNOWN";
     CreditCardInputListener creditCardInputListener;
+    int previousCharacterCount = 0;
+    boolean proceed = true;
 
     public CreditCardEditText(Context context) {
         super(context);
@@ -49,23 +51,26 @@ public class CreditCardEditText extends AppCompatAutoCompleteTextView {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int charCount = s.toString().replace("-", "").length();
-                if (type.equals("UNKNOWN") || type.equals("Visa") || type.equals("Discover") || type.equals("JCB")) {
-                    if (charCount == 4 || charCount == 8 || charCount == 12) {
-                        if (!s.toString().endsWith("-")) {
-                            append("-");
-                        }
-                    }
-                } else if (type.equals("American_Express") || type.equals("Diners_Club")) {
-                    if (charCount == 4 || charCount == 10) {
-                        if (!s.toString().endsWith("-")) {
-                            append("-");
-                        }
-                    }
+                if (!proceed){
+                    setSelection(s.length());
+                    proceed = true;
+                    return;
                 }
+
+                if (previousCharacterCount >= charCount){//is delete
+                    previousCharacterCount = charCount;
+                    return;
+                }
+                previousCharacterCount = charCount;
+                formatAndSetText(s.toString().replace("-", ""));
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (!proceed){
+                    proceed = true;
+                    return;
+                }
                 changeIcon();
             }
         });
@@ -139,5 +144,48 @@ public class CreditCardEditText extends AppCompatAutoCompleteTextView {
 
     public void removeCreditCardInputListener(){
         this.creditCardInputListener = null;
+    }
+
+    private void formatAndSetText(String s){
+        proceed = false;
+        if (s.length() < 4){
+            setText(s);
+            return;
+        }
+        if (s.length() == 4){
+            setText(s + "-");
+            return;
+        }
+        int charCount = s.length();
+        StringBuilder builder = new StringBuilder("");
+        if (type.equals("UNKNOWN") || type.equals("Visa") || type.equals("Discover") || type.equals("JCB")) {
+//            if (charCount == 4 || charCount == 8 || charCount == 12) {
+//                if (!s.toString().endsWith("-")) {
+//                    append("-");
+//                }
+//            }
+
+            for (int i = 0; i < charCount; i++) {
+                if (i == 4 || i == 8 || i == 12){ //4th, 8th and 12th chars
+                    builder.append("-");
+                }
+                builder.append(s.charAt(i));
+            }
+        } else if (type.equals("American_Express") || type.equals("Diners_Club")) {
+//            if (charCount == 4 || charCount == 10) {
+//                if (!s.toString().endsWith("-")) {
+//                    append("-");
+//                }
+//            }
+
+            for (int i = 0; i < charCount; i++) {
+                if (i == 4 || i == 10){ //4th, 10th chars
+                    builder.append("-");
+                }
+                builder.append(s.charAt(i));
+            }
+        }
+
+        setText(builder.toString());
     }
 }
