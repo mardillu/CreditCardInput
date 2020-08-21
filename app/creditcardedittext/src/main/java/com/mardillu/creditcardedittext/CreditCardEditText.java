@@ -7,6 +7,8 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+
 import java.util.regex.Pattern;
 
 /**
@@ -14,7 +16,7 @@ import java.util.regex.Pattern;
  *
  * @author Ezekiel Sebastine.
  */
-public class CreditCardEditText extends androidx.appcompat.widget.AppCompatEditText {
+public class CreditCardEditText extends AppCompatAutoCompleteTextView {
 
     String type = "UNKNOWN";
     CreditCardInputListener creditCardInputListener;
